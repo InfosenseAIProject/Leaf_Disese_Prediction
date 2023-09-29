@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEAF DISEASE PREDICTION</title>
+    <!-- Include Font Awesome CSS (you can replace with your own link) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #f1f1f1;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            max-height: 60px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #0a0a0a;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+            max-height: 40px;
+        }
+
+        .contact-info {
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            flex: 1;
+        }
+
+        .left-content {
+            margin-bottom: 20px;
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .upload-section {
+            border: 1px dashed #999;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .input-label {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #25b845;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #selected-image {
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #34bd2f;
+            color: #fff;
+            text-align: center;
+            padding: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center content vertically */
+                }
+        
+
+        .copyright {
+            font-size: 16px;
+            text-align: left; /* Align copyright text to the left */
+            flex: 1; /* Occupy remaining space on the left */
+        }
+
+        .social-media-links {
+            margin-top: 10px;
+            text-align: right; /* Align social media links to the right */
+            flex: 1; /* Occupy remaining space on the right */
+
+
+        }
+
+        .social-media-links a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .heading {
+            font-family: 'Times New Roman', Times, serif; /* Apply Times New Roman font */
+            text-align: center;
+            font-size: 40px;
+            margin-top: 20px;
+            color: #10615a;
+        }
+
+        button[type="submit"] {
+            background-color: #0388c5;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+            }
+
+            .left-content {
+                flex: 1;
+                margin-bottom: 0;
+                margin-right: 20px;
+            }
+
+            .right-content {
+                flex: 1;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img class="logo" src="https://infosense.tech/_next/static/media/logo.d34a12c6.png" alt="Company Logo"> <!-- Replace with your logo -->
+            <div class="contact-info">
+                Contact: +91 - 9343017165
+            </div>
+        </div>
+    </header>
+    <div class="heading">LEAF DISEASE PREDICTION</div>
+    <div class="main-content">
+        <div class="left-content">
+            <img class="image" src="{{ url_for('static', filename='img.png') }}" alt="Company Image">
+        </div>
+        <div class="right-content">
+            <form action = "/success" method = "post" enctype="multipart/form-data">
+            <div class="upload-section">
+                <label class="input-label" for="image-upload">
+                    <span id="file-label">Choose Leaf Image</span>
+                    <i class="fas fa-upload"></i>
+                </label>
+                <input type="file"name="image" id="image-upload" onchange="displayImage()" accept="image/*">
+                <div id="selected-image"></div>
+            </div>
+            <button type="submit">Predict</button>
+            </form>
+            <!-- {% if result %} -->
+            <div class="card bg-dark" style="width: 18rem;">
+            <img src="{{url_for('static', filename='img.jpg')}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">The Image belongs to:{{ result }} Disease </h5>
+                <!-- <p class="card-text">{{ result }}</p> -->
+            </div>
+		</div>
+	   <!-- {% endif %} -->
+        </div>
+    </div>
+    <footer>
+    <!--
+        <div class="social-media-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+    --> 
+        <div class="copyright">&copy; Copyright © InfosenseAI Pvt. Ltd. 2023 All Rights Reserved</div>
+    </footer>
+
+    <script>
+        function displayImage() {
+            const fileInput = document.getElementById("image-upload");
+            const selectedImage = document.getElementById("selected-image");
+            const fileLabel = document.getElementById("file-label");
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("image");
+                    selectedImage.innerHTML = "";
+                    selectedImage.appendChild(img);
+                    fileLabel.textContent = `Selected: ${file.name}`;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                selectedImage.innerHTML = "";
+                fileLabel.textContent = "Choose File";
+            }
+        }
+    </script>
+</body>
+</html>
